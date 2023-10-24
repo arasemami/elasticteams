@@ -5,6 +5,9 @@
 body {
   font-family: sans-serif;
 }
+* {
+  transition: all 300ms ease-in-out;
+}
 
 .container {
   max-width: 960px;
