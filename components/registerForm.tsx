@@ -31,9 +31,12 @@ const RegisterForm = () => {
   };
 
   return (
-    <div className="container">
+    <div className="container  h-screen flex items-center justify-center">
       <div className="w-3/5 mx-auto m-10">
-        <h1 className="text-3xl font-bold  py-5">Sign Up</h1>
+      <div className="bg-blue-500   rounded-full flex m-auto w-24 h-24 items-center justify-center">
+          <h1 className="text-cyan-50 font-bold text-xl">AP</h1>
+        </div>
+        <h1 className="text-center sm:text-left text-3xl font-bold  py-5">Sign Up</h1>
         <form onSubmit={handleSubmit}>
           <div className="mb-5">
             <label htmlFor="fullName" className="block text-gray-700 dark:text-gray-300">
@@ -74,14 +77,13 @@ const RegisterForm = () => {
               className="rounded-lg w-full p-2.5 border border-gray-300 dark:border-gray-700 focus:ring-blue-500 focus:border-blue-500 dark:focus:border-blue-600 dark:focus:ring-blue-600"
             />
           </div>
-          <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mt-2 rounded">
+          <button type="submit" className="w-full sm:w-auto bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mt-2 rounded">
             Register
           </button>
-          <p className="pt-5">I have a account!
-            <b className="p-2">
-              <Link href='/auth/login'>Sign In</Link>
-            </b>
-          </p>
+          <div className="flex flex-col text-center sm:flex-row gap-1 py-5">
+            <p>I have a account! </p>
+            <Link className="font-bold hover:text-blue-500" href='/auth/login'> Sign In</Link>
+          </div> 
         </form>
       </div>
     </div>

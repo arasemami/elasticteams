@@ -12,32 +12,34 @@ const PostsList: React.FC<{ items: GridItem[] }> = ({ items }) => {
             <nav className="w-full bg-white   dark:bg-gray-800">
                 <div className="container mx-auto flex justify-between items-center   py-2">
                     <h1 className="text-3xl font-bold">All Posts</h1>
-                    <div>
-                        <div className="flex items-center border border-gray-300 dark:border-gray-700 rounded-md">
-                            <input
-                                type="search"
-                                placeholder="Search..."
-                                className="outline-none w-full px-4 py-2"
-                            />
-                            <button type="submit" className="mx-2 p-2">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                    strokeWidth="2"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                                    />
-                                </svg>
-                            </button>
-                        </div>
+
+                    <div className="flex items-center border   border-gray-300 dark:border-gray-700 rounded-md">
+                        <input
+                            type="search"
+                            placeholder="Search..."
+                            className="outline-none w-full px-4 py-2"
+                        />
+                        <button className="cursor-pointer hover:bg-gray-50">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                                />
+                            </svg>
+                        </button>
                     </div>
+
                     <nav className="space-x-5  ">
-                        <Link href="/dashboard/post/new" className="text-black-700 font-bold dark:text-gray-300 background bg-blue-300 hover:bg-blue-500 py-3 px-6 rounded-full">New Post</Link>
+                        <Link href="/dashboard/post/new" className="text-black-700 font-bold dark:text-gray-300 background bg-blue-300 hover:bg-blue-500 py-3 px-6 rounded-full">
+                            New
+                        </Link>
                     </nav>
                 </div>
             </nav>
@@ -45,7 +47,7 @@ const PostsList: React.FC<{ items: GridItem[] }> = ({ items }) => {
                 {items.map((item) => (
                     <div
                         key={item.title}
-                        className="flex flex-row justify-between items-center bg-gray-50 rounded-md mb-1 shadow-sm p-2"
+                        className="flex  flex-col-reverse sm:flex-row   justify-between items-center bg-gray-50 rounded-md mb-1 shadow-sm p-2"
                     >
                         <div className="flex justify-center ">
                             <button
@@ -68,9 +70,6 @@ const PostsList: React.FC<{ items: GridItem[] }> = ({ items }) => {
                             <p>{item.content}</p>
                             <p className="rounded-full px-4 py-1 bg-gray-300 text-sm">aras emami</p>
                         </div>
-
-
-
                     </div>
                 ))}
             </div>
