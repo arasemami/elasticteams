@@ -4,26 +4,47 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 interface registerFormData {
-  fullName: string;
   username: string;
+  email: string;
   password: string;
 
 }
 
 const RegisterForm = () => {
   const [formData, setFormData] = useState<registerFormData>({
-    fullName: '',
+    email: '',
     username: "",
     password: "",
   });
   const router = useRouter();
-
-
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    router.push("/dashboard");
+  
+    const formData = {
+      username: 'arasico',
+      email: 'aras@gmail.com',
+      password: '123456',
+    };
+  
+    // Use the Next.js fetch function
+  
+    const response = await fetch('/api/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    });
+  
+    if (response.ok) {
+      // Router push to dashboard
+      router.push('/dashboard');
+    } else {
+      // Handle error
+      console.log('Error registering user:', response.statusText);
+    }
   };
+ 
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -33,24 +54,11 @@ const RegisterForm = () => {
   return (
     <div className="container  h-screen flex items-center justify-center">
       <div className="w-3/5 mx-auto m-10">
-      <div className="bg-blue-500   rounded-full flex m-auto w-24 h-24 items-center justify-center">
+        <div className="bg-blue-500   rounded-full flex m-auto w-24 h-24 items-center justify-center">
           <h1 className="text-cyan-50 font-bold text-xl">AP</h1>
         </div>
         <h1 className="text-center sm:text-left text-3xl font-bold  py-5">Sign Up</h1>
         <form onSubmit={handleSubmit}>
-          <div className="mb-5">
-            <label htmlFor="fullName" className="block text-gray-700 dark:text-gray-300">
-              Full Name
-            </label>
-            <input
-              type="text"
-              name="fullName"
-              id="fullName"
-              value={formData.fullName}
-              onChange={handleChange}
-              className="rounded-lg w-full p-2.5 border border-gray-300 dark:border-gray-700 focus:ring-blue-500 focus:border-blue-500 dark:focus:border-blue-600 dark:focus:ring-blue-600"
-            />
-          </div>
           <div className="mb-5">
             <label htmlFor="username" className="block text-gray-700 dark:text-gray-300">
               Username
@@ -60,6 +68,19 @@ const RegisterForm = () => {
               name="username"
               id="username"
               value={formData.username}
+              onChange={handleChange}
+              className="rounded-lg w-full p-2.5 border border-gray-300 dark:border-gray-700 focus:ring-blue-500 focus:border-blue-500 dark:focus:border-blue-600 dark:focus:ring-blue-600"
+            />
+          </div>
+          <div className="mb-5">
+            <label htmlFor="email" className="block text-gray-700 dark:text-gray-300">
+              Email
+            </label>
+            <input
+              type="text"
+              name="email"
+              id="email"
+              value={formData.email}
               onChange={handleChange}
               className="rounded-lg w-full p-2.5 border border-gray-300 dark:border-gray-700 focus:ring-blue-500 focus:border-blue-500 dark:focus:border-blue-600 dark:focus:ring-blue-600"
             />
@@ -83,7 +104,7 @@ const RegisterForm = () => {
           <div className="flex flex-col text-center sm:flex-row gap-1 py-5">
             <p>I have a account! </p>
             <Link className="font-bold hover:text-blue-500" href='/auth/login'> Sign In</Link>
-          </div> 
+          </div>
         </form>
       </div>
     </div>

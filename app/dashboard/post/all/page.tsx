@@ -1,5 +1,5 @@
-import { LoginForm } from "@/components";
-import PostsList from "@/components/postsList";
+import { LoginForm } from "@/app/components";
+import PostsList from "@/app/components/postsList";
 
 const Posts = () => {
     const items = [
