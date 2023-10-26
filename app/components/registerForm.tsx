@@ -8,8 +8,8 @@ interface registerFormData {
   password: string;
 }
 
-const router = useRouter();
 const RegisterForm = () => {
+  const router = useRouter();
   const [formData, setFormData] = useState<registerFormData>({
     email: '',
     username: "",
