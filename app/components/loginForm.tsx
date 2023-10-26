@@ -19,7 +19,31 @@ const LoginForm = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    router.push("/dashboard");
+
+    var headers = new Headers();
+    headers.append("Content-Type", "application/json");
+
+    const body = JSON.stringify({
+      email: formData.username,
+      password: formData.password
+    });
+
+    var requestOptions: RequestInit = {
+      method: 'POST',
+      headers,
+      body,
+      redirect: 'follow'
+    };
+
+   const response = await fetch("https://ffrhqp-3000.csb.app/api/login", requestOptions)
+
+    if (response.ok) {
+      // Router push to dashboard
+      router.push('/dashboard');
+    } else {
+      // Handle error
+      console.log('Error registering user:', response.statusText);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

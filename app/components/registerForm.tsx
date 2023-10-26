@@ -2,49 +2,50 @@
 import { useState } from "react";
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-
 interface registerFormData {
   username: string;
   email: string;
   password: string;
-
 }
 
+const router = useRouter();
 const RegisterForm = () => {
   const [formData, setFormData] = useState<registerFormData>({
     email: '',
     username: "",
     password: "",
   });
-  const router = useRouter();
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-  
-    const formData = {
-      username: 'arasico',
-      email: 'aras@gmail.com',
-      password: '123456',
+
+    const body = {
+      userName: formData.username,
+      userMail: formData.email,
+      password: formData.password,
     };
-  
-    // Use the Next.js fetch function
-  
-    const response = await fetch('/api/register', {
-      method: 'POST',
+
+    await fetch(`${process.env.BASE_URL}/api/register`, {
+      method: "POST",
+      cache: "no-cache",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "agent": "web",
       },
-      body: JSON.stringify(formData),
-    });
-  
-    if (response.ok) {
-      // Router push to dashboard
-      router.push('/dashboard');
-    } else {
-      // Handle error
-      console.log('Error registering user:', response.statusText);
-    }
+      body: JSON.stringify(body),
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result.data);
+        localStorage.setItem('token', result.data.token)
+        router.push('/dashboard');
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+
   };
- 
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

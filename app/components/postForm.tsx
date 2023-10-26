@@ -16,11 +16,30 @@ const PostManagementForm = () => {
   });
   const router = useRouter();
 
-
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    router.push("/dashboard");
+    const headers = new Headers();
+    headers.append("Content-Type", "application/json");
+    headers.append("Authorization", "token");
+
+    const body = JSON.stringify({
+      email: formData.title,
+      password: formData.content
+    });
+
+    const requestOptions: RequestInit = {
+      method: 'POST',
+      headers: headers,
+      body,
+      redirect: 'follow'
+    };
+
+    const response = await fetch("https://ffrhqp-3000.csb.app/api/posts/create", requestOptions)
+    if (response.ok) {
+      console.log(response)
+    } else {
+      console.log('Error new post ...:', response.statusText);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,10 +70,10 @@ const PostManagementForm = () => {
             <label htmlFor="content" className="block text-gray-700 dark:text-gray-300">
               Content
             </label>
-            <textarea 
+            <textarea
               name="content"
               id="content"
-              value={formData.content} 
+              value={formData.content}
               className="rounded-lg w-full p-2.5 border border-gray-300 dark:border-gray-700 focus:ring-blue-500 focus:border-blue-500 dark:focus:border-blue-600 dark:focus:ring-blue-600"
             />
           </div>
