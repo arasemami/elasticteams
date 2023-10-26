@@ -3,16 +3,13 @@ import { useState } from "react";
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
-interface registerFormData {
-  fullName: string;
+interface LoginFormData {
   username: string;
   password: string;
-
 }
 
-const RegisterForm = () => {
-  const [formData, setFormData] = useState<registerFormData>({
-    fullName: '',
+const LoginForm = () => {
+  const [formData, setFormData] = useState<LoginFormData>({
     username: "",
     password: "",
   });
@@ -22,7 +19,31 @@ const RegisterForm = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    router.push("/dashboard");
+
+    var headers = new Headers();
+    headers.append("Content-Type", "application/json");
+
+    const body = JSON.stringify({
+      email: formData.username,
+      password: formData.password
+    });
+
+    var requestOptions: RequestInit = {
+      method: 'POST',
+      headers,
+      body,
+      redirect: 'follow'
+    };
+
+   const response = await fetch("https://ffrhqp-3000.csb.app/api/login", requestOptions)
+
+    if (response.ok) {
+      // Router push to dashboard
+      router.push('/dashboard');
+    } else {
+      // Handle error
+      console.log('Error registering user:', response.statusText);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,24 +54,11 @@ const RegisterForm = () => {
   return (
     <div className="container  h-screen flex items-center justify-center">
       <div className="w-3/5 mx-auto m-10">
-      <div className="bg-blue-500   rounded-full flex m-auto w-24 h-24 items-center justify-center">
+        <div className="bg-blue-500   rounded-full flex m-auto w-24 h-24 items-center justify-center">
           <h1 className="text-cyan-50 font-bold text-xl">AP</h1>
         </div>
-        <h1 className="text-center sm:text-left text-3xl font-bold  py-5">Sign Up</h1>
+        <h1 className="text-center sm:text-left  text-3xl font-bold  py-5">Sign In</h1>
         <form onSubmit={handleSubmit}>
-          <div className="mb-5">
-            <label htmlFor="fullName" className="block text-gray-700 dark:text-gray-300">
-              Full Name
-            </label>
-            <input
-              type="text"
-              name="fullName"
-              id="fullName"
-              value={formData.fullName}
-              onChange={handleChange}
-              className="rounded-lg w-full p-2.5 border border-gray-300 dark:border-gray-700 focus:ring-blue-500 focus:border-blue-500 dark:focus:border-blue-600 dark:focus:ring-blue-600"
-            />
-          </div>
           <div className="mb-5">
             <label htmlFor="username" className="block text-gray-700 dark:text-gray-300">
               Username
@@ -78,16 +86,17 @@ const RegisterForm = () => {
             />
           </div>
           <button type="submit" className="w-full sm:w-auto bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mt-2 rounded">
-            Register
+            Login
           </button>
           <div className="flex flex-col text-center sm:flex-row gap-1 py-5">
-            <p>I have a account! </p>
-            <Link className="font-bold hover:text-blue-500" href='/auth/login'> Sign In</Link>
-          </div> 
+            <p>You don't have a account! </p>
+            <Link className="font-bold hover:text-blue-500" href='/auth/register'> Create Account</Link>
+          </div>
+
         </form>
       </div>
     </div>
   );
 };
 
-export default RegisterForm;
+export default LoginForm;

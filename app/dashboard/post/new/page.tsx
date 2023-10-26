@@ -1,4 +1,4 @@
-import PostManagementForm from "@/components/postForm";
+import PostManagementForm from "@/app/components/postForm";
 
  
 const PostManagement = () => {

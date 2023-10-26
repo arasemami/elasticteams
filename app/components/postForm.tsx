@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 interface LoginFormData {
@@ -10,30 +9,59 @@ interface LoginFormData {
 
 const PostManagementForm = () => {
 
+
+
   const [formData, setFormData] = useState<LoginFormData>({
     title: "",
     content: "",
   });
-  const router = useRouter();
-
-
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    router.push("/dashboard");
+    const token = localStorage.getItem('token') || '';
+    const headers = new Headers();
+    headers.append("Content-Type", "application/json");
+    headers.append("Authorization", token);
+
+    const body = JSON.stringify({
+      title: formData.title,
+      content: formData.content
+    });
+
+    const requestOptions: RequestInit = {
+      method: 'POST',
+      headers: headers,
+      body,
+      redirect: 'follow'
+    };
+
+    const response = await fetch(`${process.env.BASE_URL}/api/posts/create`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        resetForm
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
   };
+
+  const resetForm = () => {
+    alert('ras rest form')
+  }
 
   return (
     <div className="container">
       <div className=" mx-auto">
         <h1 className="text-3xl font-bold ">Create New Post</h1>
         <p className="mb-10">For create a new post please fill all of field.</p>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit}  >
           <div className="mb-5">
             <label htmlFor="title" className="block text-gray-700 dark:text-gray-300">
               Title
@@ -51,10 +79,12 @@ const PostManagementForm = () => {
             <label htmlFor="content" className="block text-gray-700 dark:text-gray-300">
               Content
             </label>
-            <textarea 
+            <textarea
               name="content"
               id="content"
-              value={formData.content} 
+              rows={3}
+              value={formData.content}
+              onChange={handleChange}
               className="rounded-lg w-full p-2.5 border border-gray-300 dark:border-gray-700 focus:ring-blue-500 focus:border-blue-500 dark:focus:border-blue-600 dark:focus:ring-blue-600"
             />
           </div>

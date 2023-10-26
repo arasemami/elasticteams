@@ -1,5 +1,6 @@
+"use client";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 interface GridItem {
     title: string;
@@ -7,6 +8,7 @@ interface GridItem {
 }
 
 const PostsList: React.FC<{ items: GridItem[] }> = ({ items }) => {
+
     return (
         <div>
             <nav className="w-full bg-white   dark:bg-gray-800">
