@@ -30,7 +30,7 @@ const PostManagementForm = () => {
 
     const requestOptions: RequestInit = {
       method: 'POST',
-      headers: headers,
+      headers,
       body,
       redirect: 'follow'
     };

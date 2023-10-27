@@ -2,7 +2,6 @@
 import { useState } from "react";
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-
 interface LoginFormData {
   username: string;
   password: string;
@@ -15,8 +14,6 @@ const LoginForm = () => {
   });
   const router = useRouter();
 
-
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -28,23 +25,27 @@ const LoginForm = () => {
       password: formData.password
     });
 
-    var requestOptions: RequestInit = {
-      method: 'POST',
-      headers,
-      body,
-      redirect: 'follow'
-    };
+   await fetch(`${process.env.BASE_URL}/api/login`, {
+        method: "POST",
+        cache: "no-cache",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+          "agent": "web",
+        },
+        body,
+      })
+        .then((response) => response.json())
+        .then((result) => {
+          localStorage.setItem('token', result.data.token)
+          router.push('/dashboard');
+        })
+        .catch((error) => {
+          console.log(error);
+        });
 
-   const response = await fetch("https://ffrhqp-3000.csb.app/api/login", requestOptions)
-
-    if (response.ok) {
-      // Router push to dashboard
-      router.push('/dashboard');
-    } else {
-      // Handle error
-      console.log('Error registering user:', response.statusText);
-    }
   };
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -92,7 +93,6 @@ const LoginForm = () => {
             <p>You don't have a account! </p>
             <Link className="font-bold hover:text-blue-500" href='/auth/register'> Create Account</Link>
           </div>
-
         </form>
       </div>
     </div>

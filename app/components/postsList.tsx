@@ -1,13 +1,60 @@
 "use client";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import Swal from 'sweetalert2'
 
 interface GridItem {
+    id: any;
     title: string;
     content: string;
 }
 
 const PostsList: React.FC<{ items: GridItem[] }> = ({ items }) => {
+
+    const editPostItem = (item: GridItem) => {
+        fetch(`${process.env.BASE_URL}/api/posts/${item.id}/update`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                title: item.title,
+                content: item.content,
+            }),
+        })
+            .then((response) => response.json())
+            .then((result) => {
+                const itemsCopy = [...items];
+                itemsCopy[itemsCopy.indexOf(item)] = result;
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+
+    }
+
+    const removePostItem = (item: GridItem) => {
+        const token = localStorage.getItem('token') || '';
+        const headers = new Headers();
+        headers.append("Content-Type", "application/json");
+        headers.append("Authorization", token);
+
+        fetch(`${process.env.BASE_URL}/api/posts/${item.id}/delete`, {
+            method: 'DELETE',
+            headers,
+        })
+            .then((response) => response.json())
+            .then((result) => {
+                Swal.fire({
+                    title: `${item.id} - Delete!`,
+                    text: ` ${result.error}`,
+                    icon: 'info',
+                })
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    };
 
     return (
         <div>
@@ -54,12 +101,14 @@ const PostsList: React.FC<{ items: GridItem[] }> = ({ items }) => {
                         <div className="flex justify-center ">
                             <button
                                 type="button"
+                                onClick={() => removePostItem(item)}
                                 className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
                             >
                                 Remove
                             </button>
                             <button
                                 type="button"
+                                onClick={() => editPostItem(item)}
                                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-4"
                             >
                                 Edit
@@ -70,7 +119,7 @@ const PostsList: React.FC<{ items: GridItem[] }> = ({ items }) => {
                                 {item.title}
                             </h3>
                             <p>{item.content}</p>
-                            <p className="rounded-full px-4 py-1 bg-gray-300 text-sm">aras emami</p>
+                            <p className="rounded-full px-4 py-1 bg-gray-300 text-sm">{item.title}</p>
                         </div>
                     </div>
                 ))}
@@ -81,3 +130,5 @@ const PostsList: React.FC<{ items: GridItem[] }> = ({ items }) => {
 };
 
 export default PostsList;
+
+
